@@ -1,0 +1,6 @@
+#CONFIGURACIONES
+########################################
+build = Alpha #El estado del programa
+version = 2.0 #La version del programa
+last_user = #El último usuario conectado
+########################################
