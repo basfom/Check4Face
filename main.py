@@ -1,4 +1,4 @@
-#####
+##### 
 from __future__ import print_function
 from gui.photoboothapp import PhotoBoothApp
 from imutils.video import VideoStream
@@ -20,11 +20,9 @@ def revisar_carpeta(nombre):
 def recorrer_carpetas():
     pass
 
-try:
-    vs = VideoStream().start()
-    time.sleep(2.0)
-    # Iniciar la GUI
-    pba = PhotoBoothApp(vs)
-    pba.root.mainloop()
-except:
-    print("NO hay camara!")
+
+vs = VideoStream().start()
+time.sleep(2.0)
+# Iniciar la GUI
+pba = PhotoBoothApp(vs)
+pba.root.mainloop()

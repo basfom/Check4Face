@@ -44,7 +44,7 @@ class PhotoBoothApp:
 		self.thread.start()
 
 		self.root.wm_title("Check4Face! BETA v1.0")
-		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClosea)
+		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
 	def videoLoop(self):
 		face_cascade = cv2.CascadeClassifier('data/haarcascade_frontalface_alt.xml')
@@ -63,7 +63,7 @@ class PhotoBoothApp:
 
 				if len(faces) != 0:
 					for (x,y,w,h) in faces:
-						self.temp_frame = self.frame[y:y+h,x:x+w]
+						self.temp_frame = gray[y:y+h,x:x+w]
 						cv2.rectangle(image,(x,y),(x+w,y+h),(125,255,0),2)
 
 					for (x,y,w,h) in eyes:
