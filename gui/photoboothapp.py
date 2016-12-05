@@ -18,25 +18,39 @@ class PhotoBoothApp:
 		self.root = tki.Tk()
 		self.panel = None
 
-		self.btn = tki.Button(self.root, text="Capturar!",
-			command=self.takeSnapshot)
+		self.root.resizable(0,0)
+		self.root.config(bg="grey")
+		self.root.geometry("324x407")
+
+		#IMAGENES
+		fondo = ImageTk.PhotoImage(file="gui/imgs/fondis.gif")
+		cap = ImageTk.PhotoImage(file="gui/imgs/captu.gif")
+		cap2 = ImageTk.PhotoImage(file="gui/imgs/captu2.gif")
+		nomb = ImageTk.PhotoImage(file="gui/imgs/nom.gif")
+
+		fon = tki.Label(self.root, image = fondo, bg="white")
+		fon.image = fondo
+		fon.place(x=-1,y=-1)
+
+		self.btn = tki.Button(self.root, image=cap, command=self.takeSnapshot)
+		self.btn.image = cap
+		self.btn.place(x=-2, y=316)
 		self.btn.configure(state="disabled")
 
-		self.btn2 = tki.Button(self.root, text="Comparar!",
-			command=self.takeSnapshot)
-		self.btn2.configure(state="disabled")
+		#self.btn2 = tki.Button(self.root, text="Comparar!",
+		#	command=self.takeSnapshot)
+		#self.btn2.configure(state="disabled")
 
-		self.btn.pack(side="bottom", fill="both", expand="yes", padx=10,
-			pady=10)
-		self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
-			pady=10)
 
-		lb = tki.Label(self.root, text="Nombre:")
-		self.txt = tki.Entry(self.root)
-		self.txt.pack(side="bottom", fill="both", expand="yes", padx=10,
-			pady=10)
-		lb.pack(side="bottom", expand="yes", padx=10,
-			pady=5)
+		#self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
+		#	pady=10)
+
+		lb = tki.Label(self.root, image=nomb)
+		lb.image = nomb
+		lb.place(x=-1,y=247)
+
+		self.txt = tki.Entry(self.root, width=37)
+		self.txt.place(x=10,y=289)
 
 
 		self.stopEvent = threading.Event()
@@ -78,7 +92,7 @@ class PhotoBoothApp:
 				if self.panel is None:
 					self.panel = tki.Label(image=image)
 					self.panel.image = image
-					self.panel.pack(side="left", padx=10, pady=10)
+					self.panel.place(x=10,y=10)
 
 				else:
 					self.panel.configure(image=image)
