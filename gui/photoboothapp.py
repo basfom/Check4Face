@@ -20,13 +20,14 @@ class PhotoBoothApp:
 
 		self.root.resizable(0,0)
 		self.root.config(bg="grey")
-		self.root.geometry("324x407")
+		self.root.geometry("324x471")
 
 		#IMAGENES
 		fondo = ImageTk.PhotoImage(file="gui/imgs/fondis.gif")
 		cap = ImageTk.PhotoImage(file="gui/imgs/captu.gif")
 		cap2 = ImageTk.PhotoImage(file="gui/imgs/captu2.gif")
 		nomb = ImageTk.PhotoImage(file="gui/imgs/nom.gif")
+		depto = nomb #es temporal
 
 		fon = tki.Label(self.root, image = fondo, bg="white")
 		fon.image = fondo
@@ -34,7 +35,7 @@ class PhotoBoothApp:
 
 		self.btn = tki.Button(self.root, image=cap, command=self.takeSnapshot)
 		self.btn.image = cap
-		self.btn.place(x=-2, y=316)
+		self.btn.place(x=-2, y=386)
 		self.btn.configure(state="disabled")
 
 		#self.btn2 = tki.Button(self.root, text="Comparar!",
@@ -44,14 +45,20 @@ class PhotoBoothApp:
 
 		#self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
 		#	pady=10)
-
+                
 		lb = tki.Label(self.root, image=nomb)
 		lb.image = nomb
 		lb.place(x=-1,y=247)
+		
+		lb2=tki.Label(self.root, image=depto)
+		lb2.image=depto
+		lb2.place(x=-1,y=310)
 
 		self.txt = tki.Entry(self.root, width=37)
-		self.txt.place(x=10,y=289)
-
+		self.txt.place(x=10,y=287)
+		
+		self.dep=tki.Entry(self.root,width=37)
+		self.dep.place(x=10,y=350)
 
 		self.stopEvent = threading.Event()
 		self.thread = threading.Thread(target=self.videoLoop, args=())
@@ -112,9 +119,14 @@ class PhotoBoothApp:
 
 		if not os.access("db/"+dirr, os.F_OK): # Si no existe el directorio lo crea
 			os.mkdir("db/"+dirr)
-
 		archivos=os.listdir("db/"+dirr) #Cuenta la cantidad de imagenes existentes en el directorio
 		filename = str(len(archivos)) + ".jpg" #El nombre del nuevo archivo es el numero de archivos en el directorio
+		
+		if  len(archivos)==0: #asi solo agrega la primera vez que se toma una foto a la persona
+			departamento= self.dep.get()
+			registro=open("data/empleados.txt","a")
+			registro.write(self.txt.get()+"-"+departamento)
+			registro.close()
 
 		cv2.imwrite("db/"+dirr+"/"+filename, self.temp_frame.copy()) #Guarda el rostro de la persona en el archivo
 		print("[INFO] Guardado {}".format(filename)) #Imprime el resultado
