@@ -13,6 +13,7 @@ import socket
 s = socket.socket()
 flag = False
 
+
 try:
     print("Probando conexion con el servidor...")
     s.connect((socket.gethostname(), 6969))
