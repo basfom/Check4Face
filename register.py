@@ -13,7 +13,6 @@ import socket
 s = socket.socket()
 flag = False
 
-
 try:
     print("Probando conexion con el servidor...")
     s.connect((socket.gethostname(), 6969))
@@ -24,14 +23,12 @@ except:
 while flag:
     print("Conexion establecida!")
 
-"""
     vs = VideoStream().start()
     time.sleep(2.0)
 
     # Iniciar la GUI
     pba = PhotoBoothApp(vs)
     pba.root.mainloop()
-"""
 
     mensaje = raw_input("Mensaje a enviar >> ")
     s.send(mensaje)
