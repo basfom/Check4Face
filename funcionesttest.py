@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import numpy
 import cv2
+from caca import *
 def ResizeImages(nombrecarpeta):
     for contador in range(10):
         print contador
@@ -12,11 +13,11 @@ def ResizeImages(nombrecarpeta):
 
 def ajustar_y_pasar_a_unos(nombrecarpeta):
     ResizeImages(nombrecarpeta)
-    ImagentoLista(nombrecarpeta)
+    return ImagentoLista(nombrecarpeta)
 
 def ImagentoLista(nombrecarpeta):
     lista_final=[]
-    for contador in range(10):  
+    for contador in range(1):  
         imagen=cv2.imread("db/"+nombrecarpeta+"/"+str(contador)+".jpg",0)
         imagen=cv2.medianBlur(imagen,5)
         imagen_thresh=cv2.adaptiveThreshold(imagen,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
@@ -34,7 +35,10 @@ def ImagentoLista(nombrecarpeta):
     arreglo_para_neuronas=numpy.array(lista_final)
     #archivo.write(matriz_de_foto)
     #archivo.close()
-    #FALTA VER LA WEAAAAA DE COMO QUEDA CON UNOS Y CEROS EN IMAGENCITA XDXDXD
-    return True
+    #FALTA VER LA WEAAAAA DE COMO QUEDA CON UNOS Y CEROS EN IMAGENCITA XDXDXDecksdi
+    return arreglo_para_neuronas
 
-ajustar_y_pasar_a_unos("caca")
+arreglo=ajustar_y_pasar_a_unos("test1")
+data=dict()
+data["test1"]=arreglo
+comparashon(data)

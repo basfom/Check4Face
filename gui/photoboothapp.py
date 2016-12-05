@@ -27,8 +27,7 @@ class PhotoBoothApp:
 		cap = ImageTk.PhotoImage(file="gui/imgs/captu.gif")
 		cap2 = ImageTk.PhotoImage(file="gui/imgs/captu2.gif")
 		nomb = ImageTk.PhotoImage(file="gui/imgs/nom.gif")
-		depto = nomb #es temporal
-
+		depto = ImageTk.PhotoImage(file="gui/imgs/depart.gif")
 		fon = tki.Label(self.root, image = fondo, bg="white")
 		fon.image = fondo
 		fon.place(x=-1,y=-1)
@@ -52,13 +51,13 @@ class PhotoBoothApp:
 		
 		lb2=tki.Label(self.root, image=depto)
 		lb2.image=depto
-		lb2.place(x=-1,y=310)
+		lb2.place(x=-1,y=316)
 
 		self.txt = tki.Entry(self.root, width=37)
-		self.txt.place(x=10,y=287)
+		self.txt.place(x=10,y=289)
 		
 		self.dep=tki.Entry(self.root,width=37)
-		self.dep.place(x=10,y=350)
+		self.dep.place(x=10,y=349)
 
 		self.stopEvent = threading.Event()
 		self.thread = threading.Thread(target=self.videoLoop, args=())
@@ -125,7 +124,7 @@ class PhotoBoothApp:
 		if  len(archivos)==0: #asi solo agrega la primera vez que se toma una foto a la persona
 			departamento= self.dep.get()
 			registro=open("data/empleados.txt","a")
-			registro.write(self.txt.get()+"-"+departamento)
+			registro.write(self.txt.get()+"-"+departamento+"\n")
 			registro.close()
 
 		cv2.imwrite("db/"+dirr+"/"+filename, self.temp_frame.copy()) #Guarda el rostro de la persona en el archivo
