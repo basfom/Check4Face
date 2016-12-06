@@ -22,22 +22,23 @@ class PhotoBoothApp:
 
 		self.root.resizable(0,0)
 		self.root.config(bg="grey")
-		self.root.geometry("324x471")
+		self.root.geometry("655x250")
 
 		#IMAGENES
-		fondo = ImageTk.PhotoImage(file="gui/imgs/fondis.gif")
-		cap = ImageTk.PhotoImage(file="gui/imgs/captu.gif")
-		cap2 = ImageTk.PhotoImage(file="gui/imgs/captu2.gif")
-		nomb = ImageTk.PhotoImage(file="gui/imgs/nom.gif")
-		fon=tki.Label(self.root,image=fondo,bg="white")
-		fon.image=fondo
+		re=ImageTk.PhotoImage(file="gui/imgs/reen.gif")
+		im=ImageTk.PhotoImage(file="gui/imgs/si,soyyo.gif")
+		fondo = ImageTk.PhotoImage(file="gui/imgs/fondo2.gif")
+		fon = tki.Label(self.root, image = fondo, bg="white")
+		fon.image = fondo
 		fon.place(x=-1,y=-1)
 
+		self.btn = tki.Button(self.root, image=re,command=self.rentrenar) #SE TIENE QUE DEFINIR ESTA WEA
+		self.btn.image = re
+		self.btn.place(x=322, y=183)
 
-		self.btn = tki.Button(self.root,image=cap,command=self.takeSnapshot)
-		self.btn.image = cap
-		self.btn.place(x=-2, y=386)
-		self.btn.configure(state="disabled")
+		self.yo = tki.Button(self.root, image=im,command=self.registrar)
+		self.yo.image=im
+		self.yo.place(x=434,y=183)
 
 		#self.btn2 = tki.Button(self.root, text="Comparar!",
 		#	command=self.takeSnapshot)
@@ -47,17 +48,11 @@ class PhotoBoothApp:
 		#self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
 		#	pady=10)
 
-		self.txt = tki.Entry(self.root, width=37)
-		self.txt.place(x=10,y=289)
-
-		self.dep=tki.Entry(self.root,width=37)
-		self.dep.place(x=10,y=349)
-
 		self.stopEvent = threading.Event()
 		self.thread = threading.Thread(target=self.videoLoop, args=())
 		self.thread.start()
 
-		self.root.wm_title("Check4Face! Register")
+		self.root.wm_title("Check4Face! Identifier")
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.onClose)
 
 	def videoLoop(self):
@@ -129,7 +124,10 @@ class PhotoBoothApp:
                         #/openface/util/align-dlib.py ./db/klae/ align outerEyesAndNose ./db/klae/ --size 96
 			self.flag_global = False
 		print("[INFO] Guardado {}".format(filename)) #Imprime el resultado
-
+	def registrar(self):
+		pass
+	def rentrenar(self):
+		pass
 	def onClose(self):
 		print("[INFO] Cerrando...")
 		self.stopEvent.set()

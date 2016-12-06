@@ -1,8 +1,10 @@
 #####
 from __future__ import print_function
-from gui.photoboothapp import PhotoBoothApp
+from gui.photoboothapp1 import PhotoBoothApp
 from imutils.video import VideoStream
 import time
+from PIL import ImageTk
+from PIL import Image
 ####
 
 vs = VideoStream().start()
