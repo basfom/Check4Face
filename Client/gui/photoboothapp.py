@@ -14,6 +14,7 @@ class PhotoBoothApp:
 		self.frame = None
 		self.thread = None
 		self.stopEvent = None
+		self.flag_global = True
 
 		self.root = tki.Tk()
 		self.panel = None
@@ -44,18 +45,18 @@ class PhotoBoothApp:
 
 		#self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
 		#	pady=10)
-                
+
 		lb = tki.Label(self.root, image=nomb)
 		lb.image = nomb
 		lb.place(x=-1,y=247)
-		
+
 		lb2=tki.Label(self.root, image=depto)
 		lb2.image=depto
 		lb2.place(x=-1,y=316)
 
 		self.txt = tki.Entry(self.root, width=37)
 		self.txt.place(x=10,y=289)
-		
+
 		self.dep=tki.Entry(self.root,width=37)
 		self.dep.place(x=10,y=349)
 
@@ -88,7 +89,8 @@ class PhotoBoothApp:
 
 					for (x,y,w,h) in eyes:
     						cv2.circle(image,(x+w/2,y+h/2),w/2,(255,128,0),2)
-					self.btn.configure(state="normal")
+					if self.flag_global == True:
+						self.btn.configure(state="normal")
 				else:
 					self.btn.configure(state="disabled")
 
@@ -120,7 +122,7 @@ class PhotoBoothApp:
 			os.mkdir("db/"+dirr)
 		archivos=os.listdir("db/"+dirr) #Cuenta la cantidad de imagenes existentes en el directorio
 		filename = str(len(archivos)) + ".png" #El nombre del nuevo archivo es el numero de archivos en el directorio
-		
+
 		if  len(archivos)==0: #asi solo agrega la primera vez que se toma una foto a la persona
 			departamento= self.dep.get()
 			registro=open("data/empleados.txt","a")
@@ -129,11 +131,12 @@ class PhotoBoothApp:
 
 		cv2.imwrite("db/"+dirr+"/"+filename, self.temp_frame.copy()) #Guarda el rostro de la persona en el archivo
                 if len(archivos)==7:
-                        os.system("ls")
-                        os.system("./openface/util/align-dlib.py ./db/"+dirr+"/ align outerEyesAndNose ./db/"+dirr +"/ --size 96")
+                        os.system("mkdir db_neuronas/"+dirr)
+                        os.system("../openface/util/align-dlib.py ./db/"+dirr+"/ align outerEyesAndNose ./db_neuronas/"+dirr +"/ --size 96")
                         #/openface/util/align-dlib.py ./db/klae/ align outerEyesAndNose ./db/klae/ --size 96
+			self.flag_global = False
 		print("[INFO] Guardado {}".format(filename)) #Imprime el resultado
-                                        
+
 	def onClose(self):
 		print("[INFO] Cerrando...")
 		self.stopEvent.set()

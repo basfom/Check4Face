@@ -1,11 +1,3 @@
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-    #
-    #      server.py
-    #
-    #      Copyright 2014 Recursos Python - www.recursospython.com
-    #
-    #
 from socket import socket, error
 def main():
     s = socket()
@@ -26,16 +18,10 @@ def main():
             break
         else:
             if input_data:
-                # Compatibilidad con Python 3.
-                if isinstance(input_data, bytes):
-                    end = input_data[0] == 1
-                else:
-                    end = input_data == chr(1)
-                if not end:
-                    # Almacenar datos.
-                    f.write(input_data)
-                else:
-                    break
+                f.write(input_data)
+            else:
+                break
+
 
     print("El archivo se ha recibido correctamente.")
     f.close()

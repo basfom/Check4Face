@@ -15,7 +15,7 @@ flag = False
 
 try:
     print("Probando conexion con el servidor...")
-    s.connect((socket.gethostname(), 6969))
+    s.connect((socket.gethostname(), 5333))
     flag = True
 except:
     print("No se puede establecer la conexion con el servidor...")
@@ -30,8 +30,7 @@ while flag:
     pba = PhotoBoothApp(vs)
     pba.root.mainloop()
 
-    mensaje = raw_input("Mensaje a enviar >> ")
-    s.send(mensaje)
+    s.send("entrenar")
     print(s.recv(1024))
     if mensaje == "close":
         break

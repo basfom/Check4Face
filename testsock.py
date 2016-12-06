@@ -1,15 +1,9 @@
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-    #
-    #      client.py
-    #
-    #      Copyright 2014 Recursos Python - www.recursospython.com
-    #
-
-from socket import socket
+from socket import socket, error
 def main():
     s = socket()
-    s.connect(("localhost", 6030))
+    s.connect(("basfo", 6969))
+
+    s.send("imagen")
 
     while True:
         f = open("5.jpg", "rb")
@@ -19,20 +13,11 @@ def main():
             # Enviar contenido.
             s.send(content)
             content = f.read(1024)
-
         break
-
-    # Se utiliza el caracter de código 1 para indicar
-    # al cliente que ya se ha enviado todo el contenido.
-    try:
-        s.send(chr(1))
-    except TypeError:
-        # Compatibilidad con Python 3.
-        s.send(bytes(chr(1), "utf-8"))
-
-    # Cerrar conexión y archivo.
+    # Cerrar conexion y archivo.
     s.close()
     f.close()
     print("El archivo ha sido enviado correctamente.")
+
 if __name__ == "__main__":
     main()
