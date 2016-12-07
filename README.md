@@ -5,12 +5,13 @@ Herramienta de detección y reconocimiento facial.
 ![Python](https://img.shields.io/badge/python-2.7-blue.svg)
 
 ## Módulos Utilizados:
-* OpenCV:
-* NeuroLab:
+* OpenCV
+* OpenFace
 
 ## Objetivos:
 * Deteccion de rostros en tiempo real             --->  __OK!__
 * Almacenamientos de rostros de forma organizada  --->  __OK!__
+...
 
 ## Desarrolladores:
 * __Rafael Días:__ Estudiante primer año Ing. Civil Informatica en la UTFSM.
