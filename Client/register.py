@@ -15,7 +15,7 @@ flag = False
 
 try:
     print("Probando conexion con el servidor...")
-    s.connect((socket.gethostname(), 5333))
+    s.connect((socket.gethostname(), 2213))
     flag = True
 except:
     print("No se puede establecer la conexion con el servidor...")

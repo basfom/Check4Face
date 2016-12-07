@@ -7,6 +7,7 @@ import datetime
 import imutils
 import cv2
 import os
+import subprocess
 
 class PhotoBoothApp:
 	def __init__(self, vs):
@@ -60,6 +61,7 @@ class PhotoBoothApp:
 		eyes_cascade = cv2.CascadeClassifier('data/haarcascade_eye.xml')
 
 		try:
+			bandera=True
 			while not self.stopEvent.is_set():
 				self.frame = self.vs.read()
 				self.frame = imutils.resize(self.frame, width=300)
@@ -71,6 +73,7 @@ class PhotoBoothApp:
 				eyes = eyes_cascade.detectMultiScale(gray, 1.3, 5)
 
 				if len(faces) != 0:
+
 					for (x,y,w,h) in faces:
 						self.temp_frame = gray[y:y+h,x:x+w]
 						cv2.rectangle(image,(x,y),(x+w,y+h),(125,255,0),2)
@@ -79,6 +82,12 @@ class PhotoBoothApp:
     						cv2.circle(image,(x+w/2,y+h/2),w/2,(255,128,0),2)
 					if self.flag_global == True:
 						self.btn.configure(state="normal")
+					if bandera:
+						bandera=False
+						cv2.imwrite("./identificador/comparative.png", self.temp_frame.copy())
+						output = subprocess.Popen("../openface/demos/classifier.py infer ../Server/info/classifier.pkl ./identificador/comparative.png", shell=True, bufsize=100000, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,close_fds=True)
+						out=out = output.stdout.read()
+						print(out)
 				else:
 					self.btn.configure(state="disabled")
 

@@ -1,4 +1,4 @@
-from socket import socket, error
+from socket import socket
 def main():
     s = socket()
     s.connect(("basfo", 6969))

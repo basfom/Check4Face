@@ -4,7 +4,7 @@ import time
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-s.bind((socket.gethostname(), 5333))
+s.bind((socket.gethostname(), 2213))
 s.listen(1)
 
 sc, addr = s.accept()
