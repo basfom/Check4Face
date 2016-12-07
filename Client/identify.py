@@ -6,6 +6,7 @@ import time
 from PIL import ImageTk
 from PIL import Image
 ####
+import socket
 
 vs = VideoStream().start()
 time.sleep(2.0)

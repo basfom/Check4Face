@@ -15,7 +15,7 @@ flag = False
 
 try:
     print("Probando conexion con el servidor...")
-    s.connect((socket.gethostname(), 2213))
+    s.connect((socket.gethostname(), 1111))
     flag = True
 except:
     print("No se puede establecer la conexion con el servidor...")
@@ -24,15 +24,15 @@ while flag:
     print("Conexion establecida!")
 
     vs = VideoStream().start()
-    time.sleep(2.0)
 
     # Iniciar la GUI
     pba = PhotoBoothApp(vs)
     pba.root.mainloop()
 
     s.send("entrenar")
-    print(s.recv(1024))
-    if mensaje == "close":
-        break
+
+    #print(s.recv(1024))
+    #if mensaje == "close":
+    #    break
 print("Cerrando cliente")
 s.close()

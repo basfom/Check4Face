@@ -7,6 +7,7 @@ import datetime
 import imutils
 import cv2
 import os
+import time
 
 class PhotoBoothApp:
 	def __init__(self, vs):
@@ -15,7 +16,7 @@ class PhotoBoothApp:
 		self.frame = None
 		self.thread = None
 		self.stopEvent = None
-		self.flag_global = True
+		self.flag_global = False
 
 		self.root = tki.Tk()
 		self.panel = None
@@ -33,19 +34,10 @@ class PhotoBoothApp:
 		fon.image=fondo
 		fon.place(x=-1,y=-1)
 
-
-		self.btn = tki.Button(self.root,image=cap,command=self.takeSnapshot)
+		self.btn = tki.Button(self.root,image=cap,command=self.pressButton)
 		self.btn.image = cap
 		self.btn.place(x=-2, y=386)
 		self.btn.configure(state="disabled")
-
-		#self.btn2 = tki.Button(self.root, text="Comparar!",
-		#	command=self.takeSnapshot)
-		#self.btn2.configure(state="disabled")
-
-
-		#self.btn2.pack(side="bottom", fill="both", expand="yes", padx=10,
-		#	pady=10)
 
 		self.txt = tki.Entry(self.root, width=37)
 		self.txt.place(x=10,y=289)
@@ -69,22 +61,31 @@ class PhotoBoothApp:
 				self.frame = self.vs.read()
 				self.frame = imutils.resize(self.frame, width=300)
 
+				if self.txt.get() != "" and self.dep.get() != "":
+					self.btn.configure(state="normal")
+				else:
+					self.btn.configure(state="disabled")
+
 				image = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
 
 				gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
 				faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-				eyes = eyes_cascade.detectMultiScale(gray, 1.3, 5)
+				#eyes = eyes_cascade.detectMultiScale(gray, 1.3, 5)
 
 				if len(faces) != 0:
 					for (x,y,w,h) in faces:
 						self.temp_frame = gray[y:y+h,x:x+w]
 						cv2.rectangle(image,(x,y),(x+w,y+h),(125,255,0),2)
 
-					for (x,y,w,h) in eyes:
-    						cv2.circle(image,(x+w/2,y+h/2),w/2,(255,128,0),2)
+					if len(faces) == 1:
+						if self.flag_global == True:
+							self.takeSnapshot()
+
+					#for (x,y,w,h) in eyes:
+    				#		cv2.circle(image,(x+w/2,y+h/2),w/2,(255,128,0),2)
 					if self.flag_global == True:
 						self.btn.configure(state="normal")
-				else:
+				#else:
 					self.btn.configure(state="disabled")
 
 				image = Image.fromarray(image)
@@ -99,8 +100,15 @@ class PhotoBoothApp:
 					self.panel.configure(image=image)
 					self.panel.image = image
 
+
+
 		except RuntimeError, e:
-			print("[INFO] RuntimeError")
+			pass
+
+	def pressButton(self):
+		self.flag_global = True
+		self.txt.configure(state='disabled')
+		self.dep.configure(state='disabled')
 
 	def takeSnapshot(self):
 		nombre = self.txt.get() # Recupera el nombre de la caja de texto
@@ -116,22 +124,43 @@ class PhotoBoothApp:
 		archivos=os.listdir("db/"+dirr) #Cuenta la cantidad de imagenes existentes en el directorio
 		filename = str(len(archivos)) + ".png" #El nombre del nuevo archivo es el numero de archivos en el directorio
 
-		if  len(archivos)==0: #asi solo agrega la primera vez que se toma una foto a la persona
-			departamento= self.dep.get()
-			registro=open("data/empleados.txt","a")
-			registro.write(self.txt.get()+"-"+departamento+"\n")
-			registro.close()
+		if len(archivos) < 11:
+			if  len(archivos)==0: #asi solo agrega la primera vez que se toma una foto a la persona
+				if not self.nombre_repetido(self.txt.get()):
+					departamento= self.dep.get()
+					registro=open("data/empleados.txt","a")
+					registro.write(self.txt.get()+"-"+departamento+"\n")
+					registro.close()
 
-		cv2.imwrite("db/"+dirr+"/"+filename, self.temp_frame.copy()) #Guarda el rostro de la persona en el archivo
-                if len(archivos)==7:
-                        os.system("mkdir db_neuronas/"+dirr)
-                        os.system("../openface/util/align-dlib.py ./db/"+dirr+"/ align outerEyesAndNose ./db_neuronas/"+dirr +"/ --size 96")
-                        #/openface/util/align-dlib.py ./db/klae/ align outerEyesAndNose ./db/klae/ --size 96
+			cv2.imwrite("db/"+dirr+"/"+filename, self.temp_frame.copy()) #Guarda el rostro de la persona en el archivo
+			if len(archivos)==10:
+				os.system("mkdir db_neuronas/"+dirr)
+				os.system("../openface/util/align-dlib.py ./db/"+dirr+"/ align outerEyesAndNose ./db_neuronas/"+dirr +"/ --size 96")
+				#/openface/util/align-dlib.py ./db/klae/ align outerEyesAndNose ./db/klae/ --size 96
+
+
+			else:
+				print("[INFO] Guardado {}".format(filename)) #Imprime el resultado
+		else:
 			self.flag_global = False
-		print("[INFO] Guardado {}".format(filename)) #Imprime el resultado
+			self.txt.configure(state='normal')
+			self.dep.configure(state='normal')
+			self.btn.configure(state="normal")
+			self.txt.delete(0, len(self.txt.get()))
+			self.txt.insert(0, "")
+			self.dep.delete(0, len(self.dep.get()))
+			self.dep.insert(0, "")
 
 	def onClose(self):
 		print("[INFO] Cerrando...")
 		self.stopEvent.set()
 		self.vs.stop()
 		self.root.quit()
+
+	def nombre_repetido(self, nombre):
+		archivo =open ("./data/empleados.txt")
+		for linea in archivo:
+			datos=linea.strip().split("-")
+			if nombre.lower()==datos[0].lower():
+				return True
+		return False

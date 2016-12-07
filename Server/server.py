@@ -4,10 +4,12 @@ import time
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-s.bind((socket.gethostname(), 2213))
+s.bind((socket.gethostname(), 1111))
 s.listen(1)
+print("Esperando conexiones...")
 
 sc, addr = s.accept()
+print(addr)
 
 file_flag = False
 
@@ -42,15 +44,9 @@ while True:
 
     elif recibido == "entrenar":
         #Generar embeddings
-        os.system("../openface/batch-represent/main.lua -outDir info/ -data ../Client/db_neuronas/")
+        os.system("../openface/batch-represent/main.lua -outDir ./info/ -data ../Client/db_neuronas/")
         os.system("../openface/demos/classifier.py train ./info/")
         print "Neurona entrenada satisfactoriamente!"
 
     elif recibido == "comparar":
         pass
-    #Si se reciben datos nos muestra la IP y el mensaje recibido
-    print str(addr[0]) + " dice: ", recibido
-
-    #Devolvemos el mensaje al cliente
-    #sc.send(recibido)
-print "Adios."
